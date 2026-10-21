@@ -1,0 +1,19 @@
+name: Build gpSP for TI-Nspire
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v4
+
+      - name: Run Ndless Compiler via Cloud Docker
+        run: |
+          docker run --rm -v ${{ github.workspace }}:/work -w /work ndless/ndless-sdk make
+
+      - name: Upload Finished Emulator
+        uses: actions/upload-artifact@v4
+        with:
+          name: gpsp-nspire-cx-ii
+          path: "**/*.tns"
